@@ -1,0 +1,139 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: #6b1e1e;
+    color: #f2e8d0;
+  }
+
+  body {
+    @apply bg-parchment-50 text-charcoal font-body;
+  }
+}
+
+@layer components {
+  /* ── Ornamental divider ──────────────────────────── */
+  .ornament-rule {
+    @apply flex items-center gap-4 my-6;
+  }
+  .ornament-rule::before,
+  .ornament-rule::after {
+    content: '';
+    @apply flex-1 h-px bg-gold-dark opacity-40;
+  }
+
+  /* ── Headings with display font ──────────────────── */
+  .heading-display {
+    @apply font-display font-semibold leading-none tracking-tight;
+  }
+
+  /* ── Small-caps label ────────────────────────────── */
+  .label-caps {
+    @apply font-sans text-xs tracking-widest-3 uppercase;
+  }
+
+  /* ── Buttons ─────────────────────────────────────── */
+  .btn-primary {
+    @apply inline-flex items-center gap-2
+           bg-oxblood text-parchment font-sans font-medium
+           text-sm tracking-widest uppercase px-8 py-3.5
+           border border-oxblood
+           transition-all duration-300
+           hover:bg-oxblood-dark hover:border-oxblood-dark
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-gold;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center gap-2
+           bg-transparent text-parchment font-sans font-medium
+           text-sm tracking-widest uppercase px-8 py-3.5
+           border border-parchment/40
+           transition-all duration-300
+           hover:border-parchment hover:bg-parchment/10
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-gold;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center gap-2
+           bg-transparent text-charcoal font-sans font-medium
+           text-sm tracking-widest uppercase px-8 py-3.5
+           border border-charcoal/30
+           transition-all duration-300
+           hover:border-charcoal hover:bg-charcoal hover:text-parchment
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-gold;
+  }
+
+  /* ── Section layout helpers ──────────────────────── */
+  .section-inner {
+    @apply max-w-7xl mx-auto px-6 lg:px-12;
+  }
+
+  /* ── Card base ───────────────────────────────────── */
+  .product-card {
+    @apply group relative overflow-hidden bg-white;
+  }
+}
+
+@layer utilities {
+  /* Subtle tartan / cross-hatch background texture */
+  .bg-tartan {
+    background-color: #1e1a17;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 28px,
+        rgba(201,168,76,0.04) 28px,
+        rgba(201,168,76,0.04) 30px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 28px,
+        rgba(201,168,76,0.04) 28px,
+        rgba(201,168,76,0.04) 30px
+      );
+  }
+
+  .bg-tartan-light {
+    background-color: #f2e8d0;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 28px,
+        rgba(107,30,30,0.04) 28px,
+        rgba(107,30,30,0.04) 30px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 28px,
+        rgba(107,30,30,0.04) 28px,
+        rgba(107,30,30,0.04) 30px
+      );
+  }
+
+  /* Parchment noise grain */
+  .grain-overlay::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.35;
+    mix-blend-mode: multiply;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}

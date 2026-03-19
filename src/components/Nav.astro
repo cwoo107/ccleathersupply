@@ -1,0 +1,205 @@
+---
+const navLinks = [
+  {
+    label: 'Shop',
+    href: '/shop',
+    dropdown: [
+      { label: 'Full Grain Leather',   href: '/shop/leather' },
+      { label: 'Tools & Hardware',     href: '/shop/tools' },
+      { label: 'Kits & Patterns',      href: '/shop/kits' },
+      { label: 'Finishing Supplies',   href: '/shop/finishing' },
+      { label: 'Books & Resources',    href: '/shop/books' },
+    ],
+  },
+  { label: 'About',   href: '/about' },
+  { label: 'Journal', href: '/journal' },
+  { label: 'Contact', href: '/contact' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header id="site-nav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+  <!-- Announcement bar -->
+  <div class="bg-charcoal text-parchment/80 text-center py-2 px-4">
+    <p class="label-caps text-[10px] tracking-widest-2">
+      Free shipping on orders over $150 &nbsp;·&nbsp; Proudly handcrafted in Idaho
+    </p>
+  </div>
+
+  <!-- Main nav bar -->
+  <nav class="bg-parchment-50/95 backdrop-blur-sm border-b border-gold/20">
+    <div class="section-inner">
+      <div class="flex items-center justify-between h-16 lg:h-20">
+
+        <!-- Logo -->
+        <a href="/" class="flex flex-col leading-none group" aria-label="Crown and Covenant Leather Supply — Home">
+          <span class="font-display font-semibold text-lg lg:text-xl text-charcoal tracking-wide group-hover:text-oxblood transition-colors duration-200">
+            Crown &amp; Covenant
+          </span>
+          <span class="label-caps text-[9px] text-gold-dark tracking-widest-2 mt-0.5">
+            Leather Supply
+          </span>
+        </a>
+
+        <!-- Desktop nav -->
+        <ul class="hidden lg:flex items-center gap-8" role="list">
+          {navLinks.map((link) => (
+            <li class="relative group">
+              {link.dropdown ? (
+                <>
+                  <button
+                    class:list={[
+                      'flex items-center gap-1 label-caps text-[11px] tracking-widest transition-colors duration-200',
+                      currentPath.startsWith(link.href)
+                        ? 'text-oxblood'
+                        : 'text-charcoal/70 hover:text-charcoal',
+                    ]}
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    {link.label}
+                    <svg class="w-2.5 h-2.5 transition-transform duration-200 group-hover:rotate-180" fill="currentColor" viewBox="0 0 10 6">
+                      <path d="M0 0l5 6 5-6z"/>
+                    </svg>
+                  </button>
+
+                  <!-- Dropdown -->
+                  <div class="absolute top-full left-1/2 -translate-x-1/2 pt-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                    <ul class="bg-parchment-50 border border-gold/20 shadow-lg shadow-charcoal/10 min-w-[200px] py-2" role="list">
+                      {link.dropdown.map((sub) => (
+                        <li>
+                          <a
+                            href={sub.href}
+                            class="block px-5 py-2.5 label-caps text-[10px] tracking-widest text-charcoal/70 hover:text-oxblood hover:bg-parchment-200 transition-colors duration-150"
+                          >
+                            {sub.label}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </>
+              ) : (
+                <a
+                  href={link.href}
+                  class:list={[
+                    'label-caps text-[11px] tracking-widest transition-colors duration-200',
+                    currentPath === link.href
+                      ? 'text-oxblood'
+                      : 'text-charcoal/70 hover:text-charcoal',
+                  ]}
+                >
+                  {link.label}
+                </a>
+              )}
+            </li>
+          ))}
+        </ul>
+
+        <!-- Right controls -->
+        <div class="flex items-center gap-4">
+          <!-- Search -->
+          <button aria-label="Search" class="hidden lg:flex text-charcoal/60 hover:text-charcoal transition-colors duration-200">
+            <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/>
+            </svg>
+          </button>
+
+          <!-- Cart -->
+          <a href="/cart" aria-label="Shopping cart" class="relative text-charcoal/60 hover:text-charcoal transition-colors duration-200">
+            <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 0 1-8 0"/>
+            </svg>
+            <!-- Cart count badge — populate via JS -->
+            <span id="cart-count" class="hidden absolute -top-1.5 -right-1.5 bg-oxblood text-parchment text-[9px] font-sans font-semibold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+          </a>
+
+          <!-- Mobile hamburger -->
+          <button
+            id="mobile-menu-toggle"
+            aria-label="Open navigation menu"
+            aria-expanded="false"
+            aria-controls="mobile-menu"
+            class="lg:hidden flex flex-col gap-1.5 p-1 text-charcoal"
+          >
+            <span class="block w-5 h-px bg-current transition-transform duration-300 origin-center" id="ham-top"></span>
+            <span class="block w-5 h-px bg-current transition-opacity duration-300" id="ham-mid"></span>
+            <span class="block w-5 h-px bg-current transition-transform duration-300 origin-center" id="ham-bot"></span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile menu drawer -->
+  <div
+    id="mobile-menu"
+    class="lg:hidden hidden bg-parchment-50 border-b border-gold/20 shadow-lg"
+    role="dialog"
+    aria-label="Navigation menu"
+  >
+    <div class="section-inner py-6 space-y-1">
+      {navLinks.map((link) => (
+        <div>
+          <a
+            href={link.href}
+            class="block py-3 border-b border-charcoal/8 font-display text-xl text-charcoal hover:text-oxblood transition-colors duration-150"
+          >
+            {link.label}
+          </a>
+          {link.dropdown && (
+            <ul class="pl-4 mt-1 space-y-1 mb-2">
+              {link.dropdown.map((sub) => (
+                <li>
+                  <a
+                    href={sub.href}
+                    class="block py-1.5 label-caps text-[10px] tracking-widest text-charcoal/60 hover:text-oxblood transition-colors duration-150"
+                  >
+                    {sub.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+</header>
+
+<!-- Spacer so page content clears the fixed nav -->
+<div class="h-[calc(2.5rem+4rem)] lg:h-[calc(2.5rem+5rem)]" aria-hidden="true"></div>
+
+<script>
+  // ── Scroll: add shadow to nav when scrolled ────────────
+  const nav = document.getElementById('site-nav');
+  window.addEventListener('scroll', () => {
+    nav?.classList.toggle('shadow-md', window.scrollY > 8);
+  }, { passive: true });
+
+  // ── Mobile menu toggle ─────────────────────────────────
+  const toggle = document.getElementById('mobile-menu-toggle');
+  const menu   = document.getElementById('mobile-menu');
+  const hamTop = document.getElementById('ham-top');
+  const hamMid = document.getElementById('ham-mid');
+  const hamBot = document.getElementById('ham-bot');
+
+  toggle?.addEventListener('click', () => {
+    const open = menu?.classList.toggle('hidden') === false;
+    toggle.setAttribute('aria-expanded', String(open));
+    // Animate hamburger → X
+    if (open) {
+      hamTop?.classList.add('translate-y-[7px]', 'rotate-45');
+      hamMid?.classList.add('opacity-0');
+      hamBot?.classList.add('-translate-y-[7px]', '-rotate-45');
+    } else {
+      hamTop?.classList.remove('translate-y-[7px]', 'rotate-45');
+      hamMid?.classList.remove('opacity-0');
+      hamBot?.classList.remove('-translate-y-[7px]', '-rotate-45');
+    }
+  });
+</script>

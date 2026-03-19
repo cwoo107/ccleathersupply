@@ -1,0 +1,344 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+const values = [
+  {
+    title: 'Honesty of Material',
+    body: "We don't sell corrected-grain leather and call it full-grain. We don't pad margins with products we haven't tested. Every item in our catalog is something we'd use in our own work.",
+  },
+  {
+    title: 'The Long View',
+    body: 'Good leather outlasts the person who made it. We make for the long life — the kind of goods that end up in someone\'s hands fifty years from now and still tell a story of faithful use.',
+  },
+  {
+    title: 'Kingdom Work',
+    body: "The Covenanters understood that Christ's lordship extends to the workshop as much as the sanctuary. We make goods in that same conviction — that even small, honest work done to His glory is worth doing well.",
+  },
+  {
+    title: 'No Filler',
+    body: "Our catalog will never be large for the sake of being large. We'd rather make twenty things excellently than two hundred adequately. The Covenanters didn't compromise. Neither do we.",
+  },
+];
+---
+
+<BaseLayout title="About" description="The story behind Crown & Covenant Leather Supply — handmade leather goods made for kingdom life, named after the Scottish Covenanters and their confession of Christ's crown rights.">
+
+  <Nav />
+
+  <main>
+
+    <!-- Page header -->
+    <div class="bg-charcoal py-20 text-center relative overflow-hidden">
+      <div class="absolute inset-0 bg-tartan opacity-60 pointer-events-none"></div>
+      <div class="relative z-10 section-inner">
+        <nav class="mb-6" aria-label="Breadcrumb">
+          <ol class="flex items-center justify-center gap-2 label-caps text-[10px] text-parchment/30 tracking-widest">
+            <li><a href="/" class="hover:text-parchment/60 transition-colors">Home</a></li>
+            <li aria-hidden="true" class="text-parchment/20">/</li>
+            <li class="text-gold/60" aria-current="page">About</li>
+          </ol>
+        </nav>
+        <h1 class="heading-display text-4xl sm:text-5xl text-parchment mb-4">Our Story</h1>
+        <p class="font-body text-lg text-parchment/50 max-w-md mx-auto">
+          Why we named a leather goods company after the men who died for Christ's crown rights.
+        </p>
+      </div>
+    </div>
+
+    <!-- Main story section -->
+    <section class="py-24 bg-parchment-50">
+      <div class="section-inner">
+        <div class="max-w-3xl mx-auto">
+
+          <!-- The Crown -->
+          <div class="mb-14">
+            <p class="label-caps text-[11px] text-gold-dark tracking-widest-3 mb-5">The Crown</p>
+            <h2 class="heading-display text-3xl sm:text-4xl text-charcoal mb-8 leading-snug">
+              Christ Is King
+            </h2>
+
+            <div class="space-y-5 font-body text-lg text-charcoal/70 leading-relaxed">
+              <p>
+                In 1638, a group of Scottish Presbyterians gathered at Greyfriars Kirkyard in Edinburgh and signed the National Covenant. Their grievance was straightforward: King Charles I was trying to impose an Anglican prayer book on Scotland's Reformed church. The Covenanters refused, not merely because they were stubborn — though they were — but because they held a convictions about who actually sits on the highest throne.
+              </p>
+              <p>
+                Their confession was that Christ is King. Not symbolically. Not only spiritually. King — with crown rights over every institution, every calling, every square inch of creation. The political fight was downstream of that theological one. They were not ultimately arguing about liturgy. They were arguing about lordship.
+              </p>
+              <p>
+                The next five decades cost them dearly. Persecution, exile, execution — the period historians call the "Killing Time." The Covenanters called it faithfulness. They held the confession because they believed it was true, and they believed that truth had a king behind it.
+              </p>
+            </div>
+          </div>
+
+          <!-- Decorative quote block -->
+          <blockquote class="my-14 border-l-4 border-oxblood pl-8 py-2">
+            <p class="font-display italic text-2xl sm:text-3xl text-charcoal/70 leading-snug mb-4">
+              "Christ's crown rights over every area of life."
+            </p>
+            <footer class="label-caps text-[10px] text-charcoal/35 tracking-widest">
+              — The Covenanting Confession
+            </footer>
+          </blockquote>
+
+          <!-- The Covenant -->
+          <div class="mb-14">
+            <p class="label-caps text-[11px] text-gold-dark tracking-widest-3 mb-5">The Covenant</p>
+            <h2 class="heading-display text-3xl sm:text-4xl text-charcoal mb-8 leading-snug">
+              Leather for Kingdom Life
+            </h2>
+
+            <div class="space-y-5 font-body text-lg text-charcoal/70 leading-relaxed">
+              <p>
+                If Christ is King over every area of life, then every area of life is worth doing well. That includes the things we make and the goods we carry. A wallet, a belt, a bag — these are small things, but they belong to a life. A life that, for the Christian, is lived entirely under that kingship.
+              </p>
+              <p>
+                We started Crown &amp; Covenant to make leather goods worthy of that life. Not flashy. Not disposable. Not corrected-grain leather dressed up to look like something better. Full-grain hides, hand-cut and hand-stitched in Idaho, finished to last decades. The kind of goods you hand down.
+              </p>
+              <p>
+                We also supply the craft itself — hides, tools, and hardware for leatherworkers who want to do the same kind of work with their own hands. Making things is itself a kingdom act. We want to make it easier.
+              </p>
+            </div>
+          </div>
+
+          <!-- Second quote -->
+          <blockquote class="my-14 border-l-4 border-charcoal/15 pl-8 py-2">
+            <p class="font-display italic text-xl sm:text-2xl text-charcoal/55 leading-snug mb-4">
+              "Whatever you do, work heartily, as for the Lord and not for men."
+            </p>
+            <footer class="label-caps text-[10px] text-charcoal/35 tracking-widest">
+              — Colossians 3:23
+            </footer>
+          </blockquote>
+
+          <!-- Founder note placeholder -->
+          <!--
+          <div class="bg-parchment-200 border border-charcoal/10 p-8 lg:p-10">
+            <p class="label-caps text-[10px] text-gold-dark tracking-widest-2 mb-4">A Note from the Founder</p>
+            <p class="font-body text-base text-charcoal/60 leading-relaxed italic">
+              [Your founder's note goes here — a personal paragraph or two about why you started this, what you make, and what you believe about the craft and the kingdom.]
+            </p>
+            <div class="mt-6 flex items-center gap-4">
+              <div class="w-10 h-10 rounded-full bg-charcoal/10 flex items-center justify-center">
+                <svg class="w-5 h-5 text-charcoal/30" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                </svg>
+              </div>
+              <div>
+                <p class="font-sans font-medium text-sm text-charcoal/60">[Your Name]</p>
+                <p class="label-caps text-[9px] text-charcoal/35 tracking-widest mt-0.5">Founder · Crown &amp; Covenant</p>
+              </div>
+            </div>
+          </div>
+          -->
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Values section -->
+    <section class="py-24 bg-charcoal">
+      <div class="section-inner">
+        <div class="text-center mb-14">
+          <p class="label-caps text-[11px] text-gold/70 tracking-widest-3 mb-4">How We Work</p>
+          <h2 class="heading-display text-4xl sm:text-5xl text-parchment">What We Hold To</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-px bg-parchment/5">
+          {values.map((v) => (
+            <div class="bg-charcoal p-8 lg:p-10 hover:bg-charcoal-light transition-colors duration-300 group">
+              <div class="mb-4 w-6 h-6 border border-gold/30 group-hover:border-gold/60 transition-colors duration-300 flex items-center justify-center">
+                <div class="w-2 h-2 bg-gold/50 rotate-45 group-hover:bg-gold transition-colors duration-300"></div>
+              </div>
+              <h3 class="font-display font-semibold text-xl text-parchment mb-3">{v.title}</h3>
+              <p class="font-body text-base text-parchment/50 leading-relaxed">{v.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Location section -->
+    <section class="py-24 bg-parchment-50">
+      <div class="section-inner">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center max-w-5xl mx-auto">
+          <div>
+            <p class="label-caps text-[11px] text-gold-dark tracking-widest-3 mb-5">Where We Work</p>
+            <h2 class="heading-display text-3xl sm:text-4xl text-charcoal mb-6">
+              Meridian, Idaho
+            </h2>
+            <p class="font-body text-lg text-charcoal/65 leading-relaxed mb-6">
+              We're in the Treasure Valley — high desert country where the Snake River Plain stretches toward the Owyhee Mountains. Ranch country. Workwear country. A place where people still make things by hand and expect them to last.
+            </p>
+            <p class="font-body text-lg text-charcoal/65 leading-relaxed mb-8">
+              We think that's the right place to make leather goods for the long life.
+            </p>
+            <a href="/contact" class="btn-outline">Get in Touch</a>
+          </div>
+          <!-- Map placeholder -->
+          <div class="h-64 lg:h-80 bg-parchment-200 flex items-center justify-center border border-charcoal/10">
+            <div class="text-center">
+              <svg class="w-8 h-8 text-charcoal/20 mx-auto mb-3" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+              </svg>
+              <p class="label-caps text-[10px] text-charcoal/30 tracking-widest">Meridian, Idaho</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+
+</BaseLayout>
+
+  <Nav />
+
+  <main>
+
+    <!-- Page header -->
+    <div class="bg-charcoal py-20 text-center relative overflow-hidden">
+      <div class="absolute inset-0 bg-tartan opacity-60 pointer-events-none"></div>
+      <div class="relative z-10 section-inner">
+        <nav class="mb-6" aria-label="Breadcrumb">
+          <ol class="flex items-center justify-center gap-2 label-caps text-[10px] text-parchment/30 tracking-widest">
+            <li><a href="/" class="hover:text-parchment/60 transition-colors">Home</a></li>
+            <li aria-hidden="true" class="text-parchment/20">/</li>
+            <li class="text-gold/60" aria-current="page">About</li>
+          </ol>
+        </nav>
+        <h1 class="heading-display text-4xl sm:text-5xl text-parchment mb-4">Our Story</h1>
+        <p class="font-body text-lg text-parchment/50 max-w-md mx-auto">
+          Why we named a leather supply company after seventeenth-century Scottish dissenters.
+        </p>
+      </div>
+    </div>
+
+    <!-- Main story section -->
+    <section class="py-24 bg-parchment-50">
+      <div class="section-inner">
+        <div class="max-w-3xl mx-auto">
+
+          <!-- Lede -->
+          <div class="mb-14">
+            <p class="label-caps text-[11px] text-gold-dark tracking-widest-3 mb-5">The Name</p>
+            <h2 class="heading-display text-3xl sm:text-4xl text-charcoal mb-8 leading-snug">
+              Why "Crown &amp; Covenant"?
+            </h2>
+
+            <div class="space-y-5 font-body text-lg text-charcoal/70 leading-relaxed">
+              <p>
+                In 1638, a group of Scottish Presbyterians gathered in Greyfriars Kirkyard in Edinburgh and signed a document they called the National Covenant. They were protesting royal interference in their church — specifically, King Charles I's attempt to impose an Anglican prayer book on a thoroughly Calvinist Scotland.
+              </p>
+              <p>
+                The Covenanters, as they came to be known, spent the next five decades being hunted, exiled, imprisoned, and executed for their refusal to bend. Some historians call this period the "Killing Time." The Covenanters called it faithfulness.
+              </p>
+              <p>
+                They were not, by most accounts, easy people. They were farmers, tradespeople, ministers, and mothers who had decided that certain things mattered enough to suffer for. Their covenant was the document that bound them to one another and to their convictions. To break it was unthinkable. To keep it required everything.
+              </p>
+            </div>
+          </div>
+
+          <!-- Decorative quote block -->
+          <blockquote class="my-14 border-l-4 border-oxblood pl-8 py-2">
+            <p class="font-display italic text-2xl sm:text-3xl text-charcoal/70 leading-snug mb-4">
+              "No man can serve two masters — and no craftsman can serve both quality and convenience."
+            </p>
+            <footer class="label-caps text-[10px] text-charcoal/35 tracking-widest">
+              — A Craftsman's Paraphrase
+            </footer>
+          </blockquote>
+
+          <!-- Connection to craft -->
+          <div class="space-y-5 font-body text-lg text-charcoal/70 leading-relaxed mb-14">
+            <p>
+              We named this company after the Covenanters because we wanted a name that meant something — one that carried weight. The leather trade has its own long history of covenantal thinking: the guild system, the apprentice-master relationship, the hallmark that guaranteed quality. A craftsperson's reputation was their bond.
+            </p>
+            <p>
+              Crown &amp; Covenant Leather Supply exists to be that bond for the modern leatherworker. We covenant with our customers: you will receive what we say it is, graded honestly, shipped promptly, and priced fairly. In return, we ask only that you use it to make something worth making.
+            </p>
+          </div>
+
+          <!-- Founder note placeholder -->
+          <div class="bg-parchment-200 border border-charcoal/10 p-8 lg:p-10">
+            <p class="label-caps text-[10px] text-gold-dark tracking-widest-2 mb-4">A Note from the Founder</p>
+            <p class="font-body text-base text-charcoal/60 leading-relaxed italic">
+              [Your founder's note goes here — a personal paragraph or two about why you started this, where you're located, what you make, and what you believe about the craft.]
+            </p>
+            <div class="mt-6 flex items-center gap-4">
+              <div class="w-10 h-10 rounded-full bg-charcoal/10 flex items-center justify-center">
+                <svg class="w-5 h-5 text-charcoal/30" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                </svg>
+              </div>
+              <div>
+                <p class="font-sans font-medium text-sm text-charcoal/60">[Your Name]</p>
+                <p class="label-caps text-[9px] text-charcoal/35 tracking-widest mt-0.5">Founder · Crown &amp; Covenant</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Values section -->
+    <section class="py-24 bg-charcoal">
+      <div class="section-inner">
+        <div class="text-center mb-14">
+          <p class="label-caps text-[11px] text-gold/70 tracking-widest-3 mb-4">How We Operate</p>
+          <h2 class="heading-display text-4xl sm:text-5xl text-parchment">What We Believe</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-px bg-parchment/5">
+          {values.map((v) => (
+            <div class="bg-charcoal p-8 lg:p-10 hover:bg-charcoal-light transition-colors duration-300 group">
+              <div class="mb-4 w-6 h-6 border border-gold/30 group-hover:border-gold/60 transition-colors duration-300 flex items-center justify-center">
+                <div class="w-2 h-2 bg-gold/50 rotate-45 group-hover:bg-gold transition-colors duration-300"></div>
+              </div>
+              <h3 class="font-display font-semibold text-xl text-parchment mb-3">{v.title}</h3>
+              <p class="font-body text-base text-parchment/50 leading-relaxed">{v.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Location section -->
+    <section class="py-24 bg-parchment-50">
+      <div class="section-inner">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center max-w-5xl mx-auto">
+          <div>
+            <p class="label-caps text-[11px] text-gold-dark tracking-widest-3 mb-5">Where We Are</p>
+            <h2 class="heading-display text-3xl sm:text-4xl text-charcoal mb-6">
+              Nampa, Idaho
+            </h2>
+            <p class="font-body text-lg text-charcoal/65 leading-relaxed mb-6">
+              We're based in the Treasure Valley — high desert country where the Snake River Plain stretches out toward the Owyhee Mountains. It's ranch country. Workwear country. A place where people still make things by hand and expect them to last.
+            </p>
+            <p class="font-body text-lg text-charcoal/65 leading-relaxed mb-8">
+              We think that's the right place to run a leather supply company.
+            </p>
+            <a href="/contact" class="btn-outline">Get in Touch</a>
+          </div>
+          <!-- Map placeholder -->
+          <div class="h-64 lg:h-80 bg-parchment-200 flex items-center justify-center border border-charcoal/10">
+            <div class="text-center">
+              <svg class="w-8 h-8 text-charcoal/20 mx-auto mb-3" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+              </svg>
+              <p class="label-caps text-[10px] text-charcoal/30 tracking-widest">Nampa, Idaho</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+
+</BaseLayout>
