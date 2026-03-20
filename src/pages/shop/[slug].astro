@@ -1,0 +1,400 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { supabase } from '../../lib/supabase.js';
+
+// ── Product code → URL slug + display name ──────────────────────────────────
+const PRODUCT_SLUGS = {
+  ACC: { slug: 'accessories',    label: 'Accessories' },
+  BIF: { slug: 'bifold',         label: 'Bifold Wallet' },
+  BLT: { slug: 'belts',          label: 'Belts' },
+  CAR: { slug: 'card-holder',    label: 'Card Holder' },
+  CUS: { slug: 'custom',         label: 'Custom Orders' },
+  HAN: { slug: 'handbag',        label: 'Handbag' },
+  KEY: { slug: 'keychain',       label: 'Keychain' },
+  NOT: { slug: 'notebook-cover', label: 'Notebook Cover' },
+  STP: { slug: 'camera-strap',   label: 'Camera Strap' },
+  SUN: { slug: 'glasses-case',   label: 'Glasses Case' },
+  TOT: { slug: 'tote',           label: 'Tote' },
+};
+
+// Reverse map: slug → product code
+const SLUG_TO_CODE = Object.fromEntries(
+  Object.entries(PRODUCT_SLUGS).map(([code, { slug }]) => [slug, code])
+);
+
+export async function getStaticPaths() {
+  const PRODUCT_SLUGS = {
+    ACC: { slug: 'accessories',    label: 'Accessories' },
+    BIF: { slug: 'bifold',         label: 'Bifold Wallet' },
+    BLT: { slug: 'belts',          label: 'Belts' },
+    CAR: { slug: 'card-holder',    label: 'Card Holder' },
+    CUS: { slug: 'custom',         label: 'Custom Orders' },
+    HAN: { slug: 'handbag',        label: 'Handbag' },
+    KEY: { slug: 'keychain',       label: 'Keychain' },
+    NOT: { slug: 'notebook-cover', label: 'Notebook Cover' },
+    STP: { slug: 'camera-strap',   label: 'Camera Strap' },
+    SUN: { slug: 'glasses-case',   label: 'Glasses Case' },
+    TOT: { slug: 'tote',           label: 'Tote' },
+  };
+
+  // Fetch all products — only public-facing columns
+  const { data: products, error } = await supabase
+    .from('products')
+    .select('"Product Name", "SKU", "Product", "Leather", "Binding", "Other Material", "Dimensions", "Sale Price", "Description"');
+
+  if (error) throw new Error(`Supabase products error: ${error.message}`);
+
+  // Fetch inventory for leather/material display info
+  const { data: inventory, error: invError } = await supabase
+    .from('inventory')
+    .select('"Item Name", "Category", "SKU", "Supplier", "Color", "Size/Weight"');
+
+  if (invError) throw new Error(`Supabase inventory error: ${invError.message}`);
+
+  // Build a lookup map: inventory SKU → inventory row
+  const inventoryMap = {};
+  for (const item of inventory) {
+    inventoryMap[item['SKU']] = item;
+  }
+
+
+  // Group products by product code (e.g. all "CAR" rows together)
+  const grouped = {};
+  for (const row of products) {
+    const code = row['Product'];
+    if (!grouped[code]) grouped[code] = [];
+    grouped[code].push(row);
+  }
+
+  // Build one path per unique product code
+  return Object.entries(grouped).map(([code, variants]) => {
+    const slugInfo = PRODUCT_SLUGS[code];
+    if (!slugInfo) return null;
+
+    // Enrich each variant with inventory data for leather + materials
+    const enrichedVariants = variants.map(v => {
+      const leatherInfo = inventoryMap[v['Leather']] ?? null;
+      const bindingInfo = inventoryMap[v.binding] ?? null;
+      const otherInfo   = v.other_material ? inventoryMap[v.other_material] ?? null : null;
+
+      return {
+        sku:           v['SKU'],
+        leather_code:  v['Leather'],
+        leather_name:  leatherInfo?.['Item Name'] ?? v['Leather'],
+        leather_color: leatherInfo?.['Color'] ?? null,
+        binding_code:  v['Binding'],
+        binding_name:  bindingInfo?.['Item Name'] ?? v['Binding'],
+        other_code:    v['Other Material'] ?? null,
+        other_name:    otherInfo?.['Item Name'] ?? v['Other Material'] ?? null,
+        dimensions:    v['Dimensions'],
+        sale_price:    v['Sale Price'],
+      };
+    });
+
+    // Use the first variant for shared product info
+    const first = variants[0];
+    return {
+      params: { slug: slugInfo.slug },
+      props: {
+        productCode: code,
+        productName: first['Product Name'],
+        description: first['Description'],
+        variants:    enrichedVariants,
+      },
+    };
+  }).filter(Boolean);
+}
+
+const { productCode, productName, description, variants } = Astro.props;
+
+// First variant is the default selected
+const defaultVariant = variants[0];
+---
+
+<BaseLayout title={productName} description={description}>
+  <Nav />
+
+  <main class="bg-parchment-50">
+    <div class="section-inner py-12">
+
+      <!-- Breadcrumb -->
+      <nav class="mb-8">
+        <ol class="flex items-center gap-2 label-caps text-[10px] text-charcoal/40 tracking-widest">
+          <li><a href="/" class="hover:text-charcoal transition-colors">Home</a></li>
+          <li>/</li>
+          <li><a href="/shop" class="hover:text-charcoal transition-colors">Shop</a></li>
+          <li>/</li>
+          <li class="text-charcoal">{productName}</li>
+        </ol>
+      </nav>
+
+      <!-- Two-column layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+
+        <!-- LEFT: Image gallery -->
+        <div>
+          <!-- Main image -->
+          <div class="aspect-square w-full bg-parchment-200 overflow-hidden mb-4 flex items-center justify-center" id="main-image-wrap">
+            <img
+              id="main-image"
+              src={`/images/${productCode}-${defaultVariant.leather_code}-1.jpg`}
+              alt={productName}
+              class="w-full h-full object-cover"
+              onerror="this.style.display='none'; document.getElementById('img-placeholder').style.display='flex';"
+            />
+            <!-- Fallback placeholder if image missing -->
+            <div id="img-placeholder" class="hidden flex-col items-center justify-center w-full h-full">
+              <svg viewBox="0 0 120 90" class="w-20 mx-auto text-charcoal/10 fill-current mb-3">
+                <path d="M5 80 L5 55 L30 68 L60 20 L90 68 L115 55 L115 80 Z"/>
+                <rect x="2" y="80" width="116" height="10" rx="1"/>
+                <circle cx="60" cy="22" r="6"/>
+                <circle cx="12" cy="60" r="5"/>
+                <circle cx="108" cy="60" r="5"/>
+              </svg>
+              <p class="label-caps text-[9px] text-charcoal/25 tracking-widest">Photo coming soon</p>
+            </div>
+          </div>
+
+          <!-- Thumbnails: one per angle of the selected variant -->
+          <div class="grid grid-cols-4 gap-3" id="thumb-grid">
+            {[1, 2, 3, 4].map((n) => (
+              <button
+                class={`thumb-btn h-20 border-2 focus:outline-none overflow-hidden ${n === 1 ? 'border-oxblood/60' : 'border-charcoal/10 hover:border-charcoal/30'}`}
+                data-src={`/images/${productCode}-${defaultVariant.leather_code}-${n}.jpg`}
+                data-n={n}
+              >
+                <img
+                  src={`/images/${productCode}-${defaultVariant.leather_code}-${n}.jpg`}
+                  class="w-full h-full object-cover"
+                  alt={`View ${n}`}
+                  onerror="this.parentElement.style.display='none';"
+                />
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <!-- RIGHT: Product info -->
+        <div>
+
+          <!-- Leather label — updates on swatch change -->
+          <p class="label-caps text-[10px] text-gold-dark tracking-widest mb-2" id="leather-label">
+            {defaultVariant.leather_name}
+          </p>
+
+          <h1 class="heading-display text-4xl text-charcoal mb-3">{productName}</h1>
+
+          <!-- Price — updates on swatch change -->
+          <p class="font-sans text-2xl text-charcoal mb-6" id="price-display">
+            ${defaultVariant.sale_price}
+          </p>
+
+          <p class="font-body text-base text-charcoal/65 leading-relaxed mb-8">{description}</p>
+
+          <!-- SKU display -->
+          <p class="label-caps text-[9px] text-charcoal/30 tracking-widest mb-6" id="sku-display">
+            SKU: {defaultVariant.sku}
+          </p>
+
+          <!-- Leather variant swatches -->
+          <div class="mb-8">
+            <p class="label-caps text-[10px] text-charcoal/50 tracking-widest mb-3">
+              Leather — <span id="color-label">{defaultVariant.leather_color ?? defaultVariant.leather_name}</span>
+            </p>
+            <div class="flex gap-3 flex-wrap">
+              {variants.map((v, i) => (
+                <button
+                  class="variant-btn flex flex-col items-center gap-1.5 group focus:outline-none"
+                  data-sku={v.sku}
+                  data-leather-code={v.leather_code}
+                  data-leather-name={v.leather_name}
+                  data-leather-color={v.leather_color ?? ''}
+                  data-price={v.sale_price}
+                  data-product-code={productCode}
+                  aria-label={`Select ${v.leather_color ?? v.leather_name}`}
+                >
+                  <!-- Swatch: use actual image if available, fallback to bg-parchment-200 -->
+                  <span
+                    class={`block w-10 h-10 rounded-full border-2 border-charcoal/10 group-hover:border-charcoal/40 transition-all swatch-circle ${i === 0 ? 'outline outline-2 outline-offset-2 outline-oxblood' : ''}`}
+                    style={v.leather_color ? `background: var(--swatch-${v.leather_code}, #c9a070);` : ''}
+                  ></span>
+                  <span class="label-caps text-[9px] text-charcoal/40 tracking-widest">{v.leather_code}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <!-- Add to cart -->
+          <button id="add-to-cart" type="button" class="btn-primary w-full justify-center mb-3">
+            Add to Cart
+          </button>
+          <a href="/contact" class="btn-outline w-full justify-center text-center block">
+            Ask a Question
+          </a>
+
+          <!-- Accordion -->
+          <div class="mt-10 divide-y divide-charcoal/10 border-t border-charcoal/10">
+
+            <div>
+              <button class="acc-trigger group flex w-full items-center justify-between py-5 text-left" data-target="detail-specs">
+                <span class="label-caps text-[11px] tracking-widest text-charcoal group-hover:text-oxblood transition-colors">Specifications</span>
+                <svg class="acc-plus size-5 text-charcoal/40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+                <svg class="acc-minus size-5 text-oxblood hidden" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14"/></svg>
+              </button>
+              <div id="detail-specs" class="acc-panel hidden pb-5">
+                <dl class="space-y-2">
+                  <div class="flex gap-4">
+                    <dt class="label-caps text-[10px] text-charcoal/40 tracking-widest w-32 shrink-0">Dimensions</dt>
+                    <dd class="font-body text-sm text-charcoal/70">{defaultVariant.dimensions}</dd>
+                  </div>
+                  <div class="flex gap-4">
+                    <dt class="label-caps text-[10px] text-charcoal/40 tracking-widest w-32 shrink-0">Leather</dt>
+                    <dd class="font-body text-sm text-charcoal/70" id="spec-leather">{defaultVariant.leather_name}</dd>
+                  </div>
+                  <div class="flex gap-4">
+                    <dt class="label-caps text-[10px] text-charcoal/40 tracking-widest w-32 shrink-0">Thread</dt>
+                    <dd class="font-body text-sm text-charcoal/70">{defaultVariant.binding_name}</dd>
+                  </div>
+                  {defaultVariant.other_name && (
+                    <div class="flex gap-4">
+                      <dt class="label-caps text-[10px] text-charcoal/40 tracking-widest w-32 shrink-0">Hardware</dt>
+                      <dd class="font-body text-sm text-charcoal/70">{defaultVariant.other_name}</dd>
+                    </div>
+                  )}
+                </dl>
+              </div>
+            </div>
+
+            <div>
+              <button class="acc-trigger group flex w-full items-center justify-between py-5 text-left" data-target="detail-shipping">
+                <span class="label-caps text-[11px] tracking-widest text-charcoal group-hover:text-oxblood transition-colors">Shipping &amp; Returns</span>
+                <svg class="acc-plus size-5 text-charcoal/40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+                <svg class="acc-minus size-5 text-oxblood hidden" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14"/></svg>
+              </button>
+              <div id="detail-shipping" class="acc-panel hidden pb-5">
+                <ul class="space-y-1.5 font-body text-sm text-charcoal/65">
+                  <li>Made to order — see lead time above</li>
+                  <li>Ships USPS Priority Mail</li>
+                  <li>Free shipping on orders over $150</li>
+                  <li>No returns on custom orders, but we'll make it right within 30 days</li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+        <!-- end RIGHT -->
+
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<!-- Pass variants data to client-side JS -->
+<script define:vars={{ variants, productCode }}>
+
+  // Thumbnails
+  const mainImage = document.getElementById('main-image');
+  const placeholder = document.getElementById('img-placeholder');
+
+  document.querySelectorAll('.thumb-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.thumb-btn').forEach(t => {
+        t.classList.remove('border-oxblood/60');
+        t.classList.add('border-charcoal/10');
+      });
+      btn.classList.remove('border-charcoal/10');
+      btn.classList.add('border-oxblood/60');
+      mainImage.style.display = '';
+      placeholder.style.display = 'none';
+      mainImage.src = btn.dataset.src;
+    });
+  });
+
+  // Variant swatch selection
+  const colorLabel   = document.getElementById('color-label');
+  const leatherLabel = document.getElementById('leather-label');
+  const priceDisplay = document.getElementById('price-display');
+  const skuDisplay   = document.getElementById('sku-display');
+  const specLeather  = document.getElementById('spec-leather');
+  const thumbGrid    = document.getElementById('thumb-grid');
+
+  document.querySelectorAll('.variant-btn').forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+      const leatherCode  = btn.dataset.leatherCode;
+      const leatherName  = btn.dataset.leatherName;
+      const leatherColor = btn.dataset.leatherColor;
+      const price        = btn.dataset.price;
+      const sku          = btn.dataset.sku;
+
+      // Update text
+      colorLabel.textContent   = leatherColor || leatherName;
+      leatherLabel.textContent = leatherName;
+      priceDisplay.textContent = `${price}`;
+      skuDisplay.textContent   = `SKU: ${sku}`;
+      specLeather.textContent  = leatherName;
+
+      // Update swatch outlines
+      document.querySelectorAll('.swatch-circle').forEach((sw, j) => {
+        if (i === j) {
+          sw.style.outline = '2px solid rgb(107 30 30)';
+          sw.style.outlineOffset = '2px';
+        } else {
+          sw.style.outline = 'none';
+        }
+      });
+
+      // Rebuild thumbnails for new leather
+      const thumbs = thumbGrid.querySelectorAll('.thumb-btn');
+      thumbs.forEach((thumb, n) => {
+        const newSrc = `/images/${productCode}-${leatherCode}-${n + 1}.jpg`;
+        thumb.dataset.src = newSrc;
+        thumb.querySelector('img').src = newSrc;
+        thumb.style.display = '';
+      });
+
+      // Reset main image to first angle of new variant
+      mainImage.style.display = '';
+      placeholder.style.display = 'none';
+      mainImage.src = `/images/${productCode}-${leatherCode}-1.jpg`;
+
+      // Reset thumb active state
+      thumbs.forEach(t => { t.classList.remove('border-oxblood/60'); t.classList.add('border-charcoal/10'); });
+      thumbs[0].classList.add('border-oxblood/60');
+      thumbs[0].classList.remove('border-charcoal/10');
+    });
+  });
+
+  // Accordion
+  document.querySelectorAll('.acc-trigger').forEach(trigger => {
+    trigger.addEventListener('click', () => {
+      const panel  = document.getElementById(trigger.dataset.target);
+      const isOpen = !panel.classList.contains('hidden');
+
+      document.querySelectorAll('.acc-panel').forEach(p => p.classList.add('hidden'));
+      document.querySelectorAll('.acc-plus').forEach(p => p.classList.remove('hidden'));
+      document.querySelectorAll('.acc-minus').forEach(m => m.classList.add('hidden'));
+
+      if (!isOpen) {
+        panel.classList.remove('hidden');
+        trigger.querySelector('.acc-plus').classList.add('hidden');
+        trigger.querySelector('.acc-minus').classList.remove('hidden');
+      }
+    });
+  });
+
+  // Cart
+  const cartBtn = document.getElementById('add-to-cart');
+  cartBtn.addEventListener('click', () => {
+    const original = cartBtn.textContent;
+    cartBtn.textContent = '✓ Added';
+    cartBtn.disabled = true;
+    setTimeout(() => { cartBtn.textContent = original; cartBtn.disabled = false; }, 1800);
+  });
+
+</script>

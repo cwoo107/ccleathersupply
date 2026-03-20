@@ -2,51 +2,40 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
+import { supabase } from '../../lib/supabase.js';
 
-const categories = [
-{
-    slug: 'wallets',
-    label: 'Wallets',
-    description: 'Handcrafted wallets.',
-    count: 0,   // replace with real product count
-  },
-  {
-      slug: 'not',
-      label: 'A5 Notebook Cover',
-      description: 'Sized to fit your favorite A5 notebook, sketchbook, or journal.',
-      count: 0,   // replace with real product count
-    },
-  {
-    slug: 'leather',
-    label: 'Full Grain Leather',
-    description: 'Vegetable tanned, chrome tanned, and bridle hides sourced from premium tanneries.',
-    count: 0,   // replace with real product count
-  },
-  {
-    slug: 'tools',
-    label: 'Tools & Hardware',
-    description: 'Pricking irons, stitching chisels, edge bevelers, rivets, buckles, and more.',
-    count: 0,
-  },
-  {
-    slug: 'kits',
-    label: 'Kits & Patterns',
-    description: 'Complete starter kits and printable patterns for wallets, belts, and bags.',
-    count: 0,
-  },
-  {
-    slug: 'finishing',
-    label: 'Finishing Supplies',
-    description: 'Edge finishes, neatsfoot oil, leather dyes, conditioners, and top coats.',
-    count: 0,
-  },
-  {
-    slug: 'books',
-    label: 'Books & Resources',
-    description: 'Leatherworking guides, pattern books, and references for all skill levels.',
-    count: 0,
-  },
-];
+const PRODUCT_SLUGS = {
+  ACC: { slug: 'accessories',    label: 'Accessories' },
+  BIF: { slug: 'bifold',         label: 'Bifold Wallet' },
+  BLT: { slug: 'belts',          label: 'Belts' },
+  CAR: { slug: 'card-holder',    label: 'Card Holder' },
+  CUS: { slug: 'custom',         label: 'Custom Orders' },
+  HAN: { slug: 'handbag',        label: 'Handbag' },
+  KEY: { slug: 'keychain',       label: 'Keychain' },
+  NOT: { slug: 'notebook-cover', label: 'Notebook Cover' },
+  STP: { slug: 'camera-strap',   label: 'Camera Strap' },
+  SUN: { slug: 'glasses-case',   label: 'Glasses Case' },
+  TOT: { slug: 'tote',           label: 'Tote' },
+};
+
+const { data: products } = await supabase
+  .from('products')
+  .select('"Product", "SKU"');
+
+const countsByCode = {};
+for (const row of products ?? []) {
+  const code = row['Product'];
+  if (!countsByCode[code]) countsByCode[code] = 0;
+  countsByCode[code]++;
+}
+
+const categories = Object.entries(PRODUCT_SLUGS)
+  .filter(([code]) => countsByCode[code] > 0)
+  .map(([code, { slug, label }]) => ({
+    slug,
+    label,
+    count: countsByCode[code],
+  }));
 ---
 
 <BaseLayout title="Shop" description="Browse Crown & Covenant's full range of leather hides, tools, hardware, kits, and finishing supplies.">
@@ -90,7 +79,7 @@ const categories = [
               <div class="absolute inset-0 bg-gradient-to-t from-oxblood/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
 
               <div class="relative z-10">
-                <!-- Placeholder image area — swap for real product image -->
+                <!-- Placeholder image area -->
                 <div class="w-full h-40 bg-parchment-200 mb-6 flex items-center justify-center bg-tartan-light">
                   <svg class="w-10 h-10 text-charcoal/10" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24">
                     <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
@@ -101,11 +90,10 @@ const categories = [
                 <h2 class="font-display font-semibold text-2xl text-charcoal group-hover:text-oxblood transition-colors duration-200 mb-2">
                   {cat.label}
                 </h2>
-                <p class="font-body text-sm text-charcoal/55 leading-relaxed mb-5">{cat.description}</p>
 
                 <div class="flex items-center justify-between">
                   <span class="label-caps text-[10px] text-charcoal/30 tracking-widest">
-                    {cat.count > 0 ? `${cat.count} products` : 'Coming soon'}
+                    {cat.count} {cat.count === 1 ? 'variant' : 'variants'}
                   </span>
                   <span class="label-caps text-[10px] text-oxblood/60 group-hover:text-oxblood tracking-widest flex items-center gap-1.5 transition-colors duration-200">
                     Browse
