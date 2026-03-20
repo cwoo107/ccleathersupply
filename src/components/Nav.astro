@@ -3,13 +3,7 @@ const navLinks = [
   {
     label: 'Shop',
     href: '/shop',
-    dropdown: [
-      { label: 'Full Grain Leather',   href: '/shop/leather' },
-      { label: 'Tools & Hardware',     href: '/shop/tools' },
-      { label: 'Kits & Patterns',      href: '/shop/kits' },
-      { label: 'Finishing Supplies',   href: '/shop/finishing' },
-      { label: 'Books & Resources',    href: '/shop/books' },
-    ],
+
   },
   { label: 'About',   href: '/about' },
   { label: 'Journal', href: '/journal' },
@@ -172,7 +166,7 @@ const currentPath = Astro.url.pathname;
 </header>
 
 <!-- Spacer so page content clears the fixed nav -->
-<div class="h-[calc(2.5rem+4rem)] lg:h-[calc(2.5rem+5rem)]" aria-hidden="true"></div>
+<div class="h-[calc(2.5rem+4rem)] lg:h-[calc(2.5rem+4.5rem)]" aria-hidden="true"></div>
 
 <script>
   // ── Scroll: add shadow to nav when scrolled ────────────
