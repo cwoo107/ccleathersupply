@@ -1,0 +1,213 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Nav from '../../../components/Nav.astro';
+import Footer from '../../../components/Footer.astro';
+
+const product = {
+  title: '5-Slot Card Holder',
+  sku: 'CAR',
+  price: '$20',
+  leather: 'Seidel · Crazy Ranch',
+  description: 'A slim, no-nonsense card holder built to last the long life. Five card slots and nothing extra. The kind of thing you forget is in your pocket until you hand it to your son.',
+};
+---
+
+<BaseLayout title={product.title} description={product.description}>
+  <Nav />
+
+  <main class="bg-parchment-50">
+    <div class="section-inner py-12">
+
+      <!-- Breadcrumb -->
+      <nav class="mb-8">
+        <ol class="flex items-center gap-2 label-caps text-[10px] text-charcoal/40 tracking-widest">
+          <li><a href="/" class="hover:text-charcoal transition-colors">Home</a></li>
+          <li>/</li>
+          <li><a href="/shop" class="hover:text-charcoal transition-colors">Shop</a></li>
+          <li>/</li>
+          <li><a href="/shop/wallets" class="hover:text-charcoal transition-colors">Wallets</a></li>
+          <li>/</li>
+          <li class="text-charcoal">{product.title}</li>
+        </ol>
+      </nav>
+
+      <!-- Two-column product layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+
+        <!-- LEFT: Image gallery -->
+                <div>
+                  <!-- Main image -->
+                  <div class="aspect-square w-full bg-parchment-200 flex items-center justify-center mb-4">
+                    <img
+                      id="main-image"
+                      src="/images/car-1.jpg"
+                      alt="5-Slot Card Holder"
+                      class="w-full h-full object-cover object-left-top"
+                    />
+                  </div>
+
+                  <!-- Thumbnails -->
+                  <div class="grid grid-cols-3 gap-3">
+                    <button class="thumb-btn h-20 border-2 border-oxblood/60 focus:outline-none" data-src="/images/car-1.jpg" data-index="0">
+                      <img src="/images/car-1.jpg" class="w-full h-full object-cover" alt="" />
+                    </button>
+                    <button class="thumb-btn h-20 border-2 border-charcoal/10 hover:border-charcoal/30 focus:outline-none" data-src="/images/CHR.jpg" data-index="1">
+                      <img src="/images/CHR.jpg" class="w-full h-full object-cover" alt="" />
+                    </button>
+                    <button class="thumb-btn h-20 border-2 border-charcoal/10 hover:border-charcoal/30 focus:outline-none" data-src="/images/CRC.jpg" data-index="2">
+                      <img src="/images/CRC.jpg" class="w-full h-full object-cover" alt="" />
+                    </button>
+                    <button class="thumb-btn h-20 border-2 border-charcoal/10 hover:border-charcoal/30 focus:outline-none" data-src="/images/CRM.jpg" data-index="3">
+                      <img src="/images/CRM.jpg" class="w-full h-full object-cover" alt="" />
+                    </button>
+                  </div>
+        </div>
+        <!-- RIGHT: Product info -->
+        <div>
+          <p class="label-caps text-[10px] text-gold-dark tracking-widest mb-2">{product.leather}</p>
+          <h1 class="heading-display text-4xl text-charcoal mb-3">{product.title}</h1>
+          <p class="font-sans text-2xl text-charcoal mb-6">{product.price}</p>
+          <p class="font-body text-base text-charcoal/65 leading-relaxed mb-8">{product.description}</p>
+
+          <!-- Color -->
+          <div class="mb-6">
+            <p class="label-caps text-[10px] text-charcoal/50 tracking-widest mb-3">
+              Color — <span id="color-label">Cigar</span>
+            </p>
+            <div class="flex gap-3">
+              <label title="Cigar" class="cursor-pointer">
+                <input type="radio" name="color" class="sr-only color-radio" checked data-label="Cigar" />
+                <span class="color-swatch block w-8 h-8 rounded-full outline outline-2 outline-offset-2 outline-oxblood" style="background:#58382e;"></span>
+              </label>
+              <label title="Mahogany" class="cursor-pointer">
+                <input type="radio" name="color" class="sr-only color-radio" data-label="Mahogany" />
+                <span class="color-swatch block w-8 h-8 rounded-full outline outline-2 outline-offset-2 outline-transparent" style="background:#543a39;"></span>
+              </label>
+              <label title="Redwood" class="cursor-pointer">
+                              <input type="radio" name="color" class="sr-only color-radio" data-label="Redwood" />
+                              <span class="color-swatch block w-8 h-8 rounded-full outline outline-2 outline-offset-2 outline-transparent" style="background:#774c3b;"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Add to cart -->
+          <button id="add-to-cart" type="button" class="btn-primary w-full justify-center mb-3">
+            Add to Cart
+          </button>
+          <a href="/contact" class="btn-outline w-full justify-center text-center block">
+            Ask a Question
+          </a>
+
+          <!-- Accordion -->
+          <div class="mt-10 divide-y divide-charcoal/10 border-t border-charcoal/10">
+
+            <div>
+              <button class="acc-trigger group flex w-full items-center justify-between py-5 text-left" data-target="detail-specs">
+                <span class="label-caps text-[11px] tracking-widest text-charcoal group-hover:text-oxblood transition-colors">Specifications</span>
+                <svg class="acc-plus size-5 text-charcoal/40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+                <svg class="acc-minus size-5 text-oxblood hidden" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14"/></svg>
+              </button>
+              <div id="detail-specs" class="acc-panel hidden pb-5">
+                <dl class="space-y-2">
+                  <div class="flex gap-4"><dt class="label-caps text-[10px] text-charcoal/40 tracking-widest w-32 shrink-0">Dimensions</dt><dd class="font-body text-sm text-charcoal/70">4" × 3"</dd></div>
+                  <div class="flex gap-4"><dt class="label-caps text-[10px] text-charcoal/40 tracking-widest w-32 shrink-0">Card Slots</dt><dd class="font-body text-sm text-charcoal/70">5 (2 per side & 1 center)</dd></div>
+                  <div class="flex gap-4"><dt class="label-caps text-[10px] text-charcoal/40 tracking-widest w-32 shrink-0">Thread</dt><dd class="font-body text-sm text-charcoal/70">Waxed linen, saddle stitched</dd></div>
+                  <div class="flex gap-4"><dt class="label-caps text-[10px] text-charcoal/40 tracking-widest w-32 shrink-0">Edge Finish</dt><dd class="font-body text-sm text-charcoal/70">Hand-burnished, Tokonole</dd></div>
+                  <div class="flex gap-4"><dt class="label-caps text-[10px] text-charcoal/40 tracking-widest w-32 shrink-0">Lead Time</dt><dd class="font-body text-sm text-charcoal/70">5–7 business days</dd></div>
+                </dl>
+              </div>
+            </div>
+
+            <div>
+              <button class="acc-trigger group flex w-full items-center justify-between py-5 text-left" data-target="detail-leather">
+                <span class="label-caps text-[11px] tracking-widest text-charcoal group-hover:text-oxblood transition-colors">The Leather</span>
+                <svg class="acc-plus size-5 text-charcoal/40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+                <svg class="acc-minus size-5 text-oxblood hidden" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14"/></svg>
+              </button>
+              <div id="detail-leather" class="acc-panel hidden pb-5">
+                <p class="font-body text-sm text-charcoal/65 leading-relaxed">The Seidel tannery has been going strong for 75+ years and is one of the few remaining tanneries in the US. Crazy Ranch is a pull-up leather — pressure lightens it, oil darkens it. Over years of carry it builds a patina that's entirely your own.</p>
+              </div>
+            </div>
+
+            <div>
+              <button class="acc-trigger group flex w-full items-center justify-between py-5 text-left" data-target="detail-shipping">
+                <span class="label-caps text-[11px] tracking-widest text-charcoal group-hover:text-oxblood transition-colors">Shipping &amp; Returns</span>
+                <svg class="acc-plus size-5 text-charcoal/40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+                <svg class="acc-minus size-5 text-oxblood hidden" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14"/></svg>
+              </button>
+              <div id="detail-shipping" class="acc-panel hidden pb-5">
+                <ul class="space-y-1.5 font-body text-sm text-charcoal/65">
+                  <li>Made to order — lead time 5–7 business days</li>
+                  <li>Ships USPS Priority Mail</li>
+                  <li>Free shipping on orders over $150</li>
+                  <li>No returns on custom orders, but we'll make it right within 30 days</li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+
+          <p class="mt-6 label-caps text-[9px] text-charcoal/25 tracking-widest">SKU: {product.sku}</p>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<script>
+  // Thumbnails
+    const mainImage = document.getElementById('main-image');
+
+    document.querySelectorAll('.thumb-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.thumb-btn').forEach(t => {
+          t.classList.remove('border-oxblood/60');
+          t.classList.add('border-charcoal/10');
+        });
+        btn.classList.remove('border-charcoal/10');
+        btn.classList.add('border-oxblood/60');
+        mainImage.src = btn.dataset.src;
+      });
+    });
+
+  // Color swatches
+  const colorLabel = document.getElementById('color-label');
+  document.querySelectorAll('.color-radio').forEach((radio, i) => {
+    radio.addEventListener('change', () => {
+      colorLabel.textContent = radio.dataset.label;
+      document.querySelectorAll('.color-swatch').forEach((sw, j) => {
+        sw.style.outlineColor = i === j ? 'rgb(107 30 30)' : 'transparent';
+      });
+    });
+  });
+
+  // Accordion
+  document.querySelectorAll('.acc-trigger').forEach(trigger => {
+    trigger.addEventListener('click', () => {
+      const panel  = document.getElementById(trigger.dataset.target);
+      const isOpen = !panel.classList.contains('hidden');
+
+      document.querySelectorAll('.acc-panel').forEach(p => p.classList.add('hidden'));
+      document.querySelectorAll('.acc-plus').forEach(p => p.classList.remove('hidden'));
+      document.querySelectorAll('.acc-minus').forEach(m => m.classList.add('hidden'));
+
+      if (!isOpen) {
+        panel.classList.remove('hidden');
+        trigger.querySelector('.acc-plus').classList.add('hidden');
+        trigger.querySelector('.acc-minus').classList.remove('hidden');
+      }
+    });
+  });
+
+  // Cart
+  const cartBtn = document.getElementById('add-to-cart');
+  cartBtn.addEventListener('click', () => {
+    const original = cartBtn.textContent;
+    cartBtn.textContent = '✓ Added';
+    cartBtn.disabled = true;
+    setTimeout(() => { cartBtn.textContent = original; cartBtn.disabled = false; }, 1800);
+  });
+</script>

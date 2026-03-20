@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
   <!-- Background -->
-  <rect width="64" height="64" fill="#1e1a17"/>
+  <rect width="64" height="64" fill="#1d2430"/>
   <!-- Crown base bar -->
   <rect x="12" y="40" width="40" height="6" rx="1" fill="#c9a84c"/>
   <!-- Crown body -->

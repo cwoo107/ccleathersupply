@@ -1,0 +1,111 @@
+---
+interface Props {
+  title:       string;
+  href:        string;
+  price:       number;
+  priceNote?:  string;       // e.g. "starting at"
+  image?:      string;       // path or URL; omit to show placeholder
+  alt?:        string;
+  leather?:    string;       // e.g. "Horween Chromexcel"
+  badge?:      string;       // e.g. "New" | "Made to Order"
+  soldOut?:    boolean;
+}
+
+const {
+  title,
+  href,
+  price,
+  priceNote,
+  image,
+  alt = title,
+  leather,
+  badge,
+  soldOut = false,
+} = Astro.props;
+
+const formattedPrice = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 0,
+}).format(price);
+---
+
+<a
+  href={soldOut ? undefined : href}
+  class:list={[
+    'product-card flex flex-col',
+    soldOut ? 'cursor-not-allowed opacity-60' : 'cursor-pointer',
+  ]}
+  aria-label={`${title}${soldOut ? ' — sold out' : ''}`}
+  aria-disabled={soldOut}
+>
+  <!-- Image area -->
+  <div class="relative overflow-hidden bg-parchment-200 aspect-[4/3]">
+    {image ? (
+      <img
+        src={image}
+        alt={alt}
+        loading="lazy"
+        decoding="async"
+        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+      />
+    ) : (
+      <!-- Placeholder frame with brand mark -->
+      <div class="absolute inset-0 flex flex-col items-center justify-center bg-tartan-light">
+        <svg viewBox="0 0 120 90" class="w-16 text-charcoal/10 fill-current" aria-hidden="true">
+          <path d="M5 80 L5 55 L30 68 L60 20 L90 68 L115 55 L115 80 Z"/>
+          <rect x="2" y="80" width="116" height="10" rx="1"/>
+          <circle cx="60" cy="22" r="6"/>
+          <circle cx="12" cy="60" r="5"/>
+          <circle cx="108" cy="60" r="5"/>
+        </svg>
+        <p class="label-caps text-[9px] text-charcoal/20 tracking-widest mt-3">Photo coming soon</p>
+      </div>
+    )}
+
+    <!-- Badge -->
+    {badge && (
+      <span class="absolute top-3 left-3 bg-charcoal text-parchment label-caps text-[9px] tracking-widest px-2.5 py-1">
+        {badge}
+      </span>
+    )}
+
+    <!-- Sold out overlay -->
+    {soldOut && (
+      <div class="absolute inset-0 bg-parchment-50/60 flex items-center justify-center">
+        <span class="label-caps text-[10px] tracking-widest text-charcoal/50 bg-parchment-50 px-3 py-1.5 border border-charcoal/15">
+          Sold Out
+        </span>
+      </div>
+    )}
+
+    <!-- Hover quick-view hint -->
+    {!soldOut && (
+      <div class="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/10 transition-colors duration-300 flex items-end justify-center pb-4 opacity-0 group-hover:opacity-100">
+        <span class="label-caps text-[10px] tracking-widest text-parchment bg-charcoal/70 px-3 py-1.5">
+          View Product
+        </span>
+      </div>
+    )}
+  </div>
+
+  <!-- Card body -->
+  <div class="flex flex-col flex-1 p-5 border border-t-0 border-charcoal/8 group-hover:border-charcoal/20 transition-colors duration-200">
+    {leather && (
+      <p class="label-caps text-[9px] text-gold-dark tracking-widest mb-1.5">{leather}</p>
+    )}
+
+    <h3 class="font-display font-semibold text-lg text-charcoal group-hover:text-oxblood transition-colors duration-200 leading-snug mb-1">
+      {title}
+    </h3>
+
+    <div class="mt-auto pt-3 flex items-baseline gap-2">
+      {priceNote && (
+        <span class="font-body text-xs text-charcoal/40 italic">{priceNote}</span>
+      )}
+      <span class="font-sans font-medium text-base text-charcoal">
+        {formattedPrice}
+      </span>
+    </div>
+  </div>
+</a>

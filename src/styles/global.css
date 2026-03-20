@@ -77,15 +77,13 @@
   }
 
   /* ── Card base ───────────────────────────────────── */
-  .product-card {
-    @apply group relative overflow-hidden bg-white;
-  }
+
 }
 
 @layer utilities {
   /* Subtle tartan / cross-hatch background texture */
   .bg-tartan {
-    background-color: #1e1a17;
+    background-color: #1d2430;
     background-image:
       repeating-linear-gradient(
         0deg,

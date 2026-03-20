@@ -24,7 +24,7 @@ export default {
         },
         charcoal: {
           light: '#3d3730',
-          DEFAULT: '#1e1a17',
+          DEFAULT: '#1d2430',
           dark:  '#0f0d0b',
         },
         gold: {
