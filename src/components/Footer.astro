@@ -1,4 +1,6 @@
 ---
+import BrevoFormFooter from './BrevoFormFooter.astro';
+
 const footerLinks = {
   Shop: [
     { label: 'Full Grain Leather',  href: '/shop/leather' },
@@ -93,32 +95,13 @@ const footerLinks = {
       </div>
 
       <!-- Newsletter -->
-      <div class="lg:col-span-3">
-        <h3 class="label-caps text-[10px] tracking-widest-2 text-gold/70 mb-4">The Covenant Letter</h3>
-        <p class="font-body text-sm text-parchment/50 mb-5 leading-relaxed">
-          Craft tutorials, new stock arrivals, and dispatches from the bench. No noise — just signal.
-        </p>
-        <form class="flex flex-col gap-3" onsubmit="return false;">
-          <label for="footer-email" class="sr-only">Email address</label>
-          <input
-            id="footer-email"
-            type="email"
-            placeholder="your@email.com"
-            autocomplete="email"
-            class="w-full bg-[#303c50] border border-parchment/10 text-parchment placeholder:text-parchment/25
-                   font-body text-sm px-4 py-3
-                   focus:outline-none focus:border-gold/50 transition-colors duration-200"
-          />
-          <button
-            type="submit"
-            class="w-full bg-oxblood text-parchment font-sans font-medium text-xs tracking-widest uppercase
-                   py-3 border border-oxblood
-                   hover:bg-oxblood-dark transition-colors duration-200"
-          >
-            Subscribe
-          </button>
-        </form>
-      </div>
+            <div id="newsletter" class="lg:col-span-3">
+              <h3 class="label-caps text-[10px] tracking-widest-2 text-gold/70 mb-4">Sign up for our Newsletter</h3>
+              <p class="font-body text-sm text-parchment/50 mb-5 leading-relaxed">
+                Updates, new stock arrivals, and dispatches from the bench.
+              </p>
+              <BrevoFormFooter />
+            </div>
 
     </div>
   </div>

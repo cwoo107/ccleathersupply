@@ -1,0 +1,207 @@
+<!-- Brevo required styles — kept minimal, overridden below -->
+<link rel="stylesheet" href="https://sibforms.com/forms/end-form/build/sib-styles.css">
+
+<style>
+  /* Hide Brevo's default chrome entirely */
+  .sib-form { background: none !important; padding: 0 !important; }
+  .sib-form-container { background: none !important; }
+  #sib-container {
+    all: unset;
+    display: block;
+  }
+
+  /* Force all Brevo elements to use border-box sizing */
+  #sib-container * {
+    box-sizing: border-box;
+  }
+
+  /* Error / success message panels — let Brevo's JS control visibility */
+  #error-message,
+  #success-message {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.875rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    border-left: 3px solid;
+  }
+  #error-message   { color: #661d1d; background: #ffeded; border-color: #ff4949; }
+  #success-message { color: #085229; background: #e7faf0; border-color: #13ce66; }
+  .sib-form-message-panel__text { display: flex; align-items: center; gap: 0.5rem; }
+  .sib-icon { width: 1rem; height: 1rem; flex-shrink: 0; fill: currentColor; }
+
+  /* Hide Brevo's built-in label and spec text */
+  .entry__label,
+  .entry__specification { display: none !important; }
+
+  /* Input */
+  #sib-form .input {
+    all: unset;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    background: white;
+    border: 1px solid rgba(30,26,23,0.2);
+    color: #1e1a17;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 1rem;
+    padding: 0.75rem 1.25rem;
+    transition: border-color 0.2s;
+  }
+  #sib-form .input:focus {
+    outline: none;
+    border-color: #6b1e1e;
+  }
+  #sib-form .input::placeholder {
+    color: rgba(30,26,23,0.3);
+    font-family: 'Crimson Pro', Georgia, serif;
+  }
+
+  /* Submit button — matches .btn-primary */
+  .sib-form-block__button {
+    all: unset;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: #6b1e1e;
+    color: #f2e8d0;
+    font-family: 'Jost', system-ui, sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.875rem 2rem;
+    border: 1px solid #6b1e1e;
+    width: 100%;
+    transition: background 0.3s, border-color 0.3s;
+  }
+  .sib-form-block__button:hover {
+    background: #4a1515;
+    border-color: #4a1515;
+  }
+
+  /* Hide Brevo's loader spinner */
+  .sib-hide-loader-icon { display: none; }
+
+  /* Layout helpers */
+  .entry__error {
+    display: block;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 0.75rem;
+    color: #661d1d;
+    margin-top: 0.25rem;
+    min-height: 0;
+  }
+  .entry__error:empty { display: none; }
+</style>
+
+<div class="sib-form">
+  <div id="sib-form-container" class="sib-form-container">
+
+    <!-- Error message -->
+    <div id="error-message" class="sib-form-message-panel" style="display:none;">
+      <div class="sib-form-message-panel__text">
+        <svg viewBox="0 0 512 512" class="sib-icon sib-notification__icon">
+          <path d="M256 40c118.621 0 216 96.075 216 216 0 119.291-96.61 216-216 216-119.244 0-216-96.562-216-216 0-119.203 96.602-216 216-216m0-32C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm-11.49 120h22.979c6.823 0 12.274 5.682 11.99 12.5l-7 168c-.268 6.428-5.556 11.5-11.99 11.5h-8.979c-6.433 0-11.722-5.073-11.99-11.5l-7-168c-.283-6.818 5.167-12.5 11.99-12.5zM256 340c-15.464 0-28 12.536-28 28s12.536 28 28 28 28-12.536 28-28-12.536-28-28-28z"/>
+        </svg>
+        <span>Your subscription could not be saved. Please try again.</span>
+      </div>
+    </div>
+
+    <!-- Success message -->
+    <div id="success-message" class="sib-form-message-panel" style="display:none;">
+      <div class="sib-form-message-panel__text">
+        <svg viewBox="0 0 512 512" class="sib-icon sib-notification__icon">
+          <path d="M256 8C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 464c-118.664 0-216-96.055-216-216 0-118.663 96.055-216 216-216 118.664 0 216 96.055 216 216 0 118.663-96.055 216-216 216zm141.63-274.961L217.15 376.071c-4.705 4.667-12.303 4.637-16.97-.068l-85.878-86.572c-4.667-4.705-4.637-12.303.068-16.97l8.52-8.451c4.705-4.667 12.303-4.637 16.97.068l68.976 69.533 163.441-162.13c4.705-4.667 12.303-4.637 16.97.068l8.451 8.52c4.668 4.705 4.637 12.303-.068 16.97z"/>
+        </svg>
+        <span>You're subscribed. Welcome to the Covenant Letter.</span>
+      </div>
+    </div>
+
+    <!-- Form container -->
+    <div id="sib-container">
+      <form
+        id="sib-form"
+        method="POST"
+        action="https://0703219b.sibforms.com/serve/MUIFAMyQJC1n8hLEsdUNylXqHtWLj6SPyrMCyos8w93wRhflHVKj3_QQtpFEaV44O0gNbQudqgyx-owK5JPIujnFcvxBWnGn6iN5FVR6ksx-5PokVE2AXEZ-74PiXpn_rRTpOxNtdvZx0wTJ1O3U_2hCkGADpnF7Z7KHFQiPlsYnyzmI8BK4kcYxJ7DHTILe_vHvQg_5udRPLjjQiQ=="
+        data-type="subscription"
+      >
+        <!-- Ornamental label -->
+        <div class="flex items-center gap-4 mb-5">
+          <div class="flex-1 h-px bg-gold-dark opacity-30"></div>
+          <p class="label-caps text-[10px] text-gold-dark tracking-widest-3">Newsletter</p>
+          <div class="flex-1 h-px bg-gold-dark opacity-30"></div>
+        </div>
+
+        <h2 class="heading-display text-3xl text-charcoal mb-2">Sign up for our newsletter</h2>
+        <p class="font-body text-sm text-charcoal/55 leading-relaxed mb-6">
+          New goods, restock notices, and notes on the craft.
+        </p>
+
+        <!-- Email field -->
+        <div class="sib-input sib-form-block mb-3">
+          <div class="form__entry entry_block">
+            <div class="form__label-row">
+              <label class="entry__label" for="EMAIL">Email</label>
+              <div class="entry__field">
+                <input
+                  class="input"
+                  type="text"
+                  id="EMAIL"
+                  name="EMAIL"
+                  autocomplete="email"
+                  placeholder="your@email.com"
+                  data-required="true"
+                  required
+                />
+              </div>
+            </div>
+            <label class="entry__error entry__error--primary"></label>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="sib-form-block">
+          <button
+            class="sib-form-block__button sib-form-block__button-with-loader"
+            form="sib-form"
+            type="submit"
+          >
+            <svg class="icon clickable__icon progress-indicator__icon sib-hide-loader-icon" viewBox="0 0 512 512">
+              <path d="M460.116 373.846l-20.823-12.022c-5.541-3.199-7.54-10.159-4.663-15.874 30.137-59.886 28.343-131.652-5.386-189.946-33.641-58.394-94.896-95.833-161.827-99.676C261.028 55.961 256 50.751 256 44.352V20.309c0-6.904 5.808-12.337 12.703-11.982 83.556 4.306 160.163 50.864 202.11 123.677 42.063 72.696 44.079 162.316 6.031 236.832-3.14 6.148-10.75 8.461-16.728 5.01z"/>
+            </svg>
+            Subscribe
+          </button>
+        </div>
+
+        <p class="font-body text-xs text-charcoal/30 mt-3 text-center">
+          Unsubscribe at any time. We'll never share your address.
+        </p>
+
+        <!-- Brevo required hidden fields -->
+        <input type="text" name="email_address_check" value="" class="input--hidden" style="display:none;">
+        <input type="hidden" name="locale" value="en">
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<!-- Brevo required scripts -->
+<script>
+  window.REQUIRED_CODE_ERROR_MESSAGE = 'Please choose a country code';
+  window.LOCALE = 'en';
+  window.EMAIL_INVALID_MESSAGE = window.SMS_INVALID_MESSAGE = "The information provided is invalid. Please review the field format and try again.";
+  window.REQUIRED_ERROR_MESSAGE = "This field cannot be left blank.";
+  window.GENERIC_INVALID_MESSAGE = "The information provided is invalid. Please review the field format and try again.";
+  window.translation = {
+    common: {
+      selectedList: '{quantity} list selected',
+      selectedLists: '{quantity} lists selected',
+      selectedOption: '{quantity} selected',
+      selectedOptions: '{quantity} selected',
+    }
+  };
+  var AUTOHIDE = Boolean(0);
+</script>
+<script defer src="https://sibforms.com/forms/end-form/build/main.js"></script>

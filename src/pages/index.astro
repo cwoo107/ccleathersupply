@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 
+
 const categories = [
   {
     label: 'Full Grain Leather',
@@ -294,38 +295,15 @@ const trustPoints = [
     <section class="py-24 bg-parchment-50">
       <div class="section-inner">
         <div class="max-w-2xl mx-auto text-center">
-
-          <p class="label-caps text-[11px] text-gold-dark tracking-widest-3 mb-4">The Covenant Letter</p>
-          <h2 class="heading-display text-4xl sm:text-5xl text-charcoal mb-5">
-            Dispatches from the Bench
-          </h2>
-          <p class="font-body text-lg text-charcoal/60 mb-10 leading-relaxed">
-            New arrivals, craft tutorials, and the occasional history lesson on Scottish Presbyterians who also happened to be stubborn. No spam — we value your inbox like we value good leather.
-          </p>
-
-          <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onsubmit="return false;">
-            <label for="hero-email" class="sr-only">Email address</label>
-            <input
-              id="hero-email"
-              type="email"
-              placeholder="your@email.com"
-              autocomplete="email"
-              class="flex-1 bg-white border border-charcoal/20 text-charcoal placeholder:text-charcoal/30
-                     font-body text-base px-5 py-3.5
-                     focus:outline-none focus:border-oxblood transition-colors duration-200"
-            />
-            <button
-              type="submit"
-              class="btn-primary whitespace-nowrap"
-            >
-              Subscribe
-            </button>
-          </form>
-
-          <p class="mt-4 font-body text-xs text-charcoal/35">
-            Unsubscribe at any time. We'll never share your address.
-          </p>
-
+          <div class="mt-16 text-center py-12 border border-dashed border-charcoal/15">
+                    <p class="label-caps text-[10px] text-charcoal/30 tracking-widest-2 mb-3">Coming Soon</p>
+                    <p class="font-body text-base text-charcoal/50 max-w-sm mx-auto">
+                      Products are being added. Subscribe to The Covenant Letter to be notified when we launch.
+                    </p>
+                    <div class="mt-6">
+                      <a href="/#newsletter" class="btn-outline">Get Notified</a>
+                    </div>
+                  </div>
         </div>
       </div>
     </section>
