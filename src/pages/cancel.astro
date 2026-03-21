@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout title="Checkout Cancelled" description="Your checkout was cancelled.">
+  <Nav />
+
+  <main class="bg-parchment-50 min-h-screen">
+    <div class="section-inner py-24 text-center max-w-xl mx-auto">
+      <p class="label-caps text-[11px] text-charcoal/30 tracking-widest-3 mb-4">Checkout Cancelled</p>
+      <h1 class="heading-display text-4xl text-charcoal mb-5">No problem.</h1>
+      <p class="font-body text-lg text-charcoal/55 leading-relaxed mb-10">
+        Your cart is still saved. Come back whenever you're ready.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="/cart" class="btn-primary">Return to Cart</a>
+        <a href="/shop" class="btn-outline">Continue Shopping</a>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>

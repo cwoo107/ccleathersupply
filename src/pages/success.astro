@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout title="Order Confirmed" description="Your order has been placed.">
+  <Nav />
+
+  <main class="bg-parchment-50 min-h-screen">
+    <div class="section-inner py-24 text-center max-w-2xl mx-auto">
+
+      <!-- Crown mark -->
+      <svg viewBox="0 0 120 90" class="w-14 mx-auto text-gold fill-current mb-8 opacity-60">
+        <path d="M5 80 L5 55 L30 68 L60 20 L90 68 L115 55 L115 80 Z"/>
+        <rect x="2" y="80" width="116" height="10" rx="1"/>
+        <circle cx="60" cy="22" r="6"/>
+        <circle cx="12" cy="60" r="5"/>
+        <circle cx="108" cy="60" r="5"/>
+      </svg>
+
+      <p class="label-caps text-[11px] text-gold-dark tracking-widest-3 mb-4">Order Confirmed</p>
+      <h1 class="heading-display text-4xl sm:text-5xl text-charcoal mb-5">Thank You.</h1>
+
+      <div class="ornament-rule max-w-xs mx-auto mb-8">
+        <span class="text-gold/60 text-sm">✦</span>
+        <span class="label-caps text-[9px] text-gold/60 tracking-widest-3 px-3">Crown &amp; Covenant</span>
+        <span class="text-gold/60 text-sm">✦</span>
+      </div>
+
+      <p class="font-body text-lg text-charcoal/65 leading-relaxed mb-4">
+        Your order has been received. We'll get to work on it right away — expect a shipping notification within 5–7 business days.
+      </p>
+      <p class="font-body text-base text-charcoal/45 leading-relaxed mb-10">
+        A confirmation has been sent to your email. If you have any questions, <a href="/contact" class="underline underline-offset-2 hover:text-oxblood transition-colors">contact us</a>.
+      </p>
+
+      <a href="/shop" class="btn-primary">Continue Shopping</a>
+
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<script>
+  // Clear cart after successful payment
+  localStorage.removeItem('cc_cart');
+  window.dispatchEvent(new CustomEvent('cart-updated', { detail: [] }));
+</script>

@@ -1,0 +1,274 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout title="Cart" description="Your Crown & Covenant cart">
+  <Nav />
+
+  <main class="bg-parchment-50 min-h-screen">
+    <div class="section-inner py-12">
+
+      <!-- Breadcrumb -->
+      <nav class="mb-8">
+        <ol class="flex items-center gap-2 label-caps text-[10px] text-charcoal/40 tracking-widest">
+          <li><a href="/" class="hover:text-charcoal transition-colors">Home</a></li>
+          <li>/</li>
+          <li class="text-charcoal">Cart</li>
+        </ol>
+      </nav>
+
+      <h1 class="heading-display text-4xl text-charcoal mb-10">Your Cart</h1>
+
+      <!-- Empty state -->
+      <div id="cart-empty" class="hidden text-center py-24">
+        <svg viewBox="0 0 120 90" class="w-16 mx-auto text-charcoal/10 fill-current mb-6">
+          <path d="M5 80 L5 55 L30 68 L60 20 L90 68 L115 55 L115 80 Z"/>
+          <rect x="2" y="80" width="116" height="10" rx="1"/>
+        </svg>
+        <p class="font-body text-lg text-charcoal/40 mb-6">Your cart is empty.</p>
+        <a href="/shop" class="btn-primary">Browse the Shop</a>
+      </div>
+
+      <!-- Cart contents -->
+      <div id="cart-contents" class="hidden">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+
+          <!-- Line items -->
+          <div class="lg:col-span-2">
+            <div id="cart-items" class="divide-y divide-charcoal/10 border-t border-charcoal/10">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Order summary -->
+          <div>
+            <div class="border border-charcoal/10 p-6 bg-white">
+              <h2 class="label-caps text-[11px] tracking-widest text-charcoal mb-6">Order Summary</h2>
+
+              <div class="space-y-3 mb-6">
+                <div class="flex justify-between font-body text-sm text-charcoal/65">
+                  <span>Subtotal</span>
+                  <span id="subtotal">$0.00</span>
+                </div>
+                <div class="flex justify-between font-body text-sm text-charcoal/65">
+                  <span>Shipping</span>
+                  <span id="shipping-note" class="italic">Calculated at checkout</span>
+                </div>
+                <div id="free-shipping-note" class="hidden font-body text-xs text-green-700 italic">
+                  ✓ You qualify for free shipping
+                </div>
+              </div>
+
+              <div class="border-t border-charcoal/10 pt-4 mb-6">
+                <div class="flex justify-between font-body font-semibold text-base text-charcoal">
+                  <span>Total</span>
+                  <span id="total">$0.00</span>
+                </div>
+              </div>
+
+              <button
+                id="checkout-btn"
+                class="btn-primary w-full justify-center"
+              >
+                Proceed to Checkout
+              </button>
+
+              <p id="checkout-error" class="hidden mt-3 font-body text-xs text-red-600 text-center"></p>
+
+              <a href="/shop" class="block text-center mt-4 label-caps text-[10px] text-charcoal/40 tracking-widest hover:text-charcoal transition-colors">
+                Continue Shopping
+              </a>
+
+              <div class="mt-6 pt-6 border-t border-charcoal/10 space-y-2">
+                <div class="flex items-center gap-2">
+                  <svg class="w-3.5 h-3.5 text-gold-dark shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
+                  <span class="font-body text-xs text-charcoal/50">Secure checkout via Stripe</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <svg class="w-3.5 h-3.5 text-gold-dark shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
+                  <span class="font-body text-xs text-charcoal/50">Made to order — 5–7 business days</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <svg class="w-3.5 h-3.5 text-gold-dark shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
+                  <span class="font-body text-xs text-charcoal/50">Free shipping over $150</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<script>
+  const FREE_SHIPPING_THRESHOLD = 150;
+
+  function formatPrice(cents) {
+    return '$' + (cents / 100).toFixed(2);
+  }
+
+  function formatPriceDollars(dollars) {
+    return '$' + Number(dollars).toFixed(2);
+  }
+
+  function getCart() {
+    try {
+      return JSON.parse(localStorage.getItem('cc_cart') || '[]');
+    } catch {
+      return [];
+    }
+  }
+
+  function saveCart(cart) {
+    localStorage.setItem('cc_cart', JSON.stringify(cart));
+    window.dispatchEvent(new CustomEvent('cart-updated', { detail: cart }));
+  }
+
+  function renderCart() {
+    const cart = getCart();
+    const empty    = document.getElementById('cart-empty');
+    const contents = document.getElementById('cart-contents');
+    const itemsEl  = document.getElementById('cart-items');
+    const subtotalEl = document.getElementById('subtotal');
+    const totalEl    = document.getElementById('total');
+    const freeNote   = document.getElementById('free-shipping-note');
+
+    if (cart.length === 0) {
+      empty.classList.remove('hidden');
+      contents.classList.add('hidden');
+      return;
+    }
+
+    empty.classList.add('hidden');
+    contents.classList.remove('hidden');
+
+    // Render line items
+    itemsEl.innerHTML = cart.map(item => `
+      <div class="py-6 flex gap-5" data-sku="${item.sku}">
+        <!-- Image -->
+        <div class="w-20 h-20 bg-parchment-200 shrink-0 overflow-hidden">
+          <img
+            src="/images/${item.image || item.sku + '-1.jpg'}"
+            alt="${item.name}"
+            class="w-full h-full object-cover"
+            onerror="this.style.display='none'"
+          />
+        </div>
+
+        <!-- Info -->
+        <div class="flex-1 min-w-0">
+          <h3 class="font-display font-semibold text-lg text-charcoal leading-snug">${item.name}</h3>
+          ${item.leather ? `<p class="label-caps text-[9px] text-gold-dark tracking-widest mt-1">${item.leather}</p>` : ''}
+          <p class="label-caps text-[9px] text-charcoal/30 tracking-widest mt-1">SKU: ${item.sku}</p>
+
+          <div class="flex items-center justify-between mt-4">
+            <!-- Quantity -->
+            <div class="flex items-center border border-charcoal/15">
+              <button
+                class="qty-btn w-8 h-8 flex items-center justify-center text-charcoal/50 hover:text-charcoal transition-colors"
+                data-sku="${item.sku}"
+                data-action="decrease"
+              >−</button>
+              <span class="w-8 text-center font-body text-sm text-charcoal">${item.quantity}</span>
+              <button
+                class="qty-btn w-8 h-8 flex items-center justify-center text-charcoal/50 hover:text-charcoal transition-colors"
+                data-sku="${item.sku}"
+                data-action="increase"
+              >+</button>
+            </div>
+
+            <div class="flex items-center gap-4">
+              <span class="font-sans font-medium text-base text-charcoal">${formatPriceDollars(item.price * item.quantity)}</span>
+              <button
+                class="remove-btn label-caps text-[9px] text-charcoal/30 tracking-widest hover:text-oxblood transition-colors"
+                data-sku="${item.sku}"
+              >Remove</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    // Totals
+    const subtotal = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+    subtotalEl.textContent = formatPriceDollars(subtotal);
+    totalEl.textContent    = formatPriceDollars(subtotal);
+
+    if (subtotal >= FREE_SHIPPING_THRESHOLD) {
+      freeNote.classList.remove('hidden');
+    } else {
+      freeNote.classList.add('hidden');
+    }
+
+    // Quantity buttons
+    document.querySelectorAll('.qty-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const cart = getCart();
+        const item = cart.find(i => i.sku === btn.dataset.sku);
+        if (!item) return;
+        if (btn.dataset.action === 'increase') {
+          item.quantity += 1;
+        } else {
+          item.quantity -= 1;
+          if (item.quantity <= 0) {
+            const idx = cart.indexOf(item);
+            cart.splice(idx, 1);
+          }
+        }
+        saveCart(cart);
+        renderCart();
+      });
+    });
+
+    // Remove buttons
+    document.querySelectorAll('.remove-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const cart = getCart().filter(i => i.sku !== btn.dataset.sku);
+        saveCart(cart);
+        renderCart();
+      });
+    });
+  }
+
+  // Checkout
+  document.getElementById('checkout-btn').addEventListener('click', async () => {
+    const cart = getCart();
+    const btn  = document.getElementById('checkout-btn');
+    const err  = document.getElementById('checkout-error');
+
+    btn.textContent = 'Redirecting...';
+    btn.disabled = true;
+    err.classList.add('hidden');
+
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: cart }),
+      });
+
+      const data = await res.json();
+
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error(data.error || 'Something went wrong');
+      }
+    } catch (e) {
+      err.textContent = e.message;
+      err.classList.remove('hidden');
+      btn.textContent = 'Proceed to Checkout';
+      btn.disabled = false;
+    }
+  });
+
+  // Initial render
+  renderCart();
+</script>
