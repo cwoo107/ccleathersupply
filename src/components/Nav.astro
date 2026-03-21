@@ -195,4 +195,22 @@ const currentPath = Astro.url.pathname;
       hamBot?.classList.remove('-translate-y-[7px]', '-rotate-45');
     }
   });
+  // ── Cart count badge ───────────────────────────────────
+    function updateCartCount() {
+      try {
+        const cart  = JSON.parse(localStorage.getItem('cc_cart') || '[]');
+        const count = cart.reduce((sum, i) => sum + i.quantity, 0);
+        const badge = document.getElementById('cart-count');
+        if (!badge) return;
+        if (count > 0) {
+          badge.textContent = count > 9 ? '9+' : count;
+          badge.classList.remove('hidden');
+        } else {
+          badge.classList.add('hidden');
+        }
+      } catch {}
+    }
+
+    updateCartCount();
+    window.addEventListener('cart-updated', updateCartCount);
 </script>

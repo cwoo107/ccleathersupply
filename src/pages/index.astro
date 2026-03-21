@@ -6,27 +6,27 @@ import Footer from '../components/Footer.astro';
 
 const categories = [
   {
-    label: 'Full Grain Leather',
-    sub: 'Vegetable tanned, chrome tanned, and bridle hides',
-    href: '/shop/leather',
+    label: 'Trusted Tanneries',
+    sub: "We never import from China, and don't source our leather from Amazon. All our leather is high quality and sourced from trusted tanneries.",
+    href: '/about',
     icon: '⬡',
   },
   {
-    label: 'Tools & Hardware',
-    sub: 'Pricking irons, awls, buckles, rivets, and more',
-    href: '/shop/tools',
+    label: 'Quality Hardware',
+    sub: "Every part matters. What good is a handmade leather product if the hardware holding it together can't hold it together?",
+    href: '/about',
+    icon: '⬡',
+  },
+  {
+    label: 'Finished to Perfection',
+    sub: "Some call it obsessive, we call it satisfying. There's no rough edges on our products. Those are for you to wear in",
+    href: '/about',
     icon: '⬡',
   },
   {
     label: 'Kits & Patterns',
-    sub: 'Start your first project with everything included',
-    href: '/shop/kits',
-    icon: '⬡',
-  },
-  {
-    label: 'Finishing Supplies',
-    sub: 'Edge finishes, dyes, conditioners, and sealants',
-    href: '/shop/finishing',
+    sub: 'Want to start making your own leather goods? Check out some of our favorite resources.',
+    href: '/about',
     icon: '⬡',
   },
 ];
@@ -51,7 +51,7 @@ const trustPoints = [
     <section class="relative bg-tartan min-h-[80vh] flex flex-col items-center justify-center text-center px-6 overflow-hidden">
 
       <!-- Background gradient vignette -->
-      <div class="absolute inset-0 bg-gradient-to-b from-charcoal-dark/60 via-transparent to-charcoal-dark/80 pointer-events-none"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-charcoal-dark/20 via-transparent to-charcoal-dark/40 pointer-events-none"></div>
 
       <!-- Decorative corner marks -->
       <div class="absolute top-8 left-8 w-12 h-12 border-t border-l border-gold/20 pointer-events-none"></div>
@@ -102,13 +102,12 @@ const trustPoints = [
     <!-- ═══════════════════════════════════════
          CATEGORY GRID
     ═══════════════════════════════════════ -->
-    <!--
     <section class="py-24 bg-parchment-50">
       <div class="section-inner">
 
         <div class="text-center mb-14">
-          <p class="label-caps text-[11px] text-gold-dark tracking-widest-3 mb-4">What We Supply</p>
-          <h2 class="heading-display text-4xl sm:text-5xl text-charcoal">The Full Range</h2>
+          <p class="label-caps text-[11px] text-gold-dark tracking-widest-3 mb-4">What Goes Into It</p>
+          <h2 class="heading-display text-4xl sm:text-5xl text-charcoal">The Standard</h2>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-charcoal/8">
@@ -131,12 +130,13 @@ const trustPoints = [
 
               <div>
                 <h3 class="font-display font-semibold text-xl text-charcoal group-hover:text-oxblood transition-colors duration-200 mb-1.5">
+                  {cat.label}
                 </h3>
-                <p class="font-body text-sm text-charcoal/55 leading-relaxed"></p>
+                <p class="font-body text-sm text-charcoal/55 leading-relaxed">{cat.sub}</p>
               </div>
 
               <span class="mt-auto label-caps text-[10px] text-oxblood/60 group-hover:text-oxblood tracking-widest flex items-center gap-1.5 transition-colors duration-200">
-                Browse
+                More info
                 <svg class="w-3 h-3 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
@@ -147,7 +147,6 @@ const trustPoints = [
 
       </div>
     </section>
-    -->
 
     <!-- ═══════════════════════════════════════
              HERITAGE / STORY SECTION

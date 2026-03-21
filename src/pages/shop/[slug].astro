@@ -391,10 +391,34 @@ const defaultVariant = variants[0];
   // Cart
   const cartBtn = document.getElementById('add-to-cart');
   cartBtn.addEventListener('click', () => {
-    const original = cartBtn.textContent;
-    cartBtn.textContent = '✓ Added';
+    const skuDisplay   = document.getElementById('sku-display');
+    const leatherLabel = document.getElementById('leather-label');
+    const priceDisplay = document.getElementById('price-display');
+
+    const sku     = skuDisplay.textContent.replace('SKU: ', '').trim();
+    const leather = leatherLabel.textContent.trim();
+    const price   = parseFloat(priceDisplay.textContent.replace(/[^0-9.]/g, ''));
+    const name    = document.querySelector('h1').textContent.trim();
+
+    try {
+      const cart     = JSON.parse(localStorage.getItem('cc_cart') || '[]');
+      const existing = cart.find(i => i.sku === sku);
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({ sku, name, leather, price, quantity: 1 });
+      }
+      localStorage.setItem('cc_cart', JSON.stringify(cart));
+      window.dispatchEvent(new CustomEvent('cart-updated', { detail: cart }));
+    } catch (e) {
+      console.error('Cart error:', e);
+    }
+
+    // Visual feedback
+    const original = cartBtn.innerHTML;
+    cartBtn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> Added to Cart`;
     cartBtn.disabled = true;
-    setTimeout(() => { cartBtn.textContent = original; cartBtn.disabled = false; }, 1800);
+    setTimeout(() => { cartBtn.innerHTML = original; cartBtn.disabled = false; }, 2000);
   });
 
 </script>
